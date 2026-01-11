@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duke Energy NC Rate Comparison Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Duke Energy NC Rate Comparison Tool</h1>
+            <p class="subtitle">Compare Standard, Time-of-Use, and TOU-EV rate schedules</p>
+        </header>
+
+        <div class="info-box">
+            <h3>📊 What is this?</h3>
+            <p>Upload your Duke Energy Green Button XML file to see which rate schedule saves you the most money:</p>
+            <ul>
+                <li><strong>Standard (RES):</strong> Traditional tiered pricing</li>
+                <li><strong>Time-of-Use (R-TOUD):</strong> Different rates based on time of day with demand charges</li>
+                <li><strong>TOU-EV (R-TOU-EV):</strong> Simplified TOU for EV owners with overnight discount</li>
+            </ul>
+        </div>
+
+        <div class="upload-section">
+            <h2>Upload Your Energy Data</h2>
+            <p>Get your Green Button XML file from <a href="https://www.duke-energy.com" target="_blank">Duke Energy's website</a></p>
+
+            <div class="upload-box" id="uploadBox">
+                <input type="file" id="fileInput" accept=".xml" style="display: none;">
+                <button class="btn-primary" onclick="document.getElementById('fileInput').click()">
+                    Choose XML File
+                </button>
+                <p class="file-name" id="fileName">No file selected</p>
+            </div>
+
+            <button class="btn-analyze" id="analyzeBtn" onclick="uploadFile()" disabled>
+                Analyze Rates
+            </button>
+
+            <div class="loading" id="loading" style="display:none;">
+                <div class="spinner"></div>
+                <p>Processing your energy data...</p>
+            </div>
+
+            <div class="error-message" id="errorMessage" style="display:none;"></div>
+        </div>
+
+        <div id="results" class="results" style="display:none;">
+            <!-- Results will be inserted here by JavaScript -->
+        </div>
+
+        <footer>
+            <p><strong>Disclaimer:</strong> This is an unofficial tool for educational purposes.
+            Results are estimates based on rate schedules effective January 1, 2026.
+            Consult Duke Energy for official rate information.</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
