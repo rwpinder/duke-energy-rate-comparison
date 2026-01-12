@@ -13,6 +13,7 @@ import numpy as np
 from scipy import stats
 import requests
 from urllib.parse import urlencode
+import pytz
 
 
 class EnergyUsageParser:
@@ -24,18 +25,21 @@ class EnergyUsageParser:
         'espi': 'http://naesb.org/espi'
     }
 
-    def __init__(self, xml_file_path: str):
+    def __init__(self, xml_file_path: str, timezone: str = 'America/New_York'):
         """
         Initialize the parser with an XML file path
 
         Args:
             xml_file_path: Path to the Energy Usage XML file
+            timezone: Timezone string (e.g., 'America/New_York', 'America/Chicago')
+                     Defaults to 'America/New_York' for Duke Energy customers
         """
         self.xml_file_path = xml_file_path
         self.tree = None
         self.root = None
         self.meter_info = {}
         self.interval_readings = []
+        self.timezone = pytz.timezone(timezone)
 
     def parse(self) -> Dict:
         """
@@ -107,9 +111,12 @@ class EnergyUsageParser:
 
                 if start_elem is not None:
                     timestamp = int(start_elem.text)
+                    # Convert UTC timestamp to specified timezone
+                    dt_utc = datetime.utcfromtimestamp(timestamp).replace(tzinfo=pytz.utc)
+                    dt_local = dt_utc.astimezone(self.timezone)
                     reading_data = {
                         'timestamp': timestamp,
-                        'datetime': datetime.fromtimestamp(timestamp),
+                        'datetime': dt_local,
                         'value': float(value.text),
                         'quality': quality.text if quality is not None else None
                     }

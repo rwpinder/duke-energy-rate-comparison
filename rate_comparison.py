@@ -613,7 +613,8 @@ def main():
 
     # Parse energy data
     print("Loading energy usage data...")
-    parser = EnergyUsageParser("Energy Usage.xml")
+    # Duke Energy operates in Eastern Time
+    parser = EnergyUsageParser("Energy Usage.xml", timezone='America/New_York')
     data = parser.parse()
     energy_df = parser.to_dataframe()
 

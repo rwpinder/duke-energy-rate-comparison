@@ -49,7 +49,8 @@ def upload_file():
         file.save(filepath)
 
         # Parse the energy data
-        parser = EnergyUsageParser(filepath)
+        # Duke Energy operates in Eastern Time (America/New_York)
+        parser = EnergyUsageParser(filepath, timezone='America/New_York')
         data = parser.parse()
         energy_df = parser.to_dataframe()
 
